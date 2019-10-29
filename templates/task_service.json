@@ -1,7 +1,7 @@
 [
     {
         "name": "awx",
-        "image": "sblack4/awx_task:v6-b3",
+	"image": "918674766850.dkr.ecr.us-east-1.amazonaws.com/awx_task:z0",
         "user": "root",
         "essential": true,
         "cpu": 2048,
