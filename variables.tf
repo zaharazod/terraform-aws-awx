@@ -68,7 +68,13 @@ variable "cidr_block" {
 variable "db_instance_type" {
   description = "Instance type used by the Aurora Postgres database"
   type        = "string"
-  default     = "db.t3.large"
+  default     = "db.t3.medium"
+}
+
+variable "db_engine" {
+  description 	= "Database engine type to use"
+  type 		= "string"
+  default	= "aurora-postgres"
 }
 
 variable "db_username" {
