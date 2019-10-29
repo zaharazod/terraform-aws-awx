@@ -237,61 +237,74 @@ resource "aws_ecs_service" "awx_queue" {
   }
 }
 
+# ==============================================
+# ElastiCache (memcached)
+# ==============================================
+
+resource "aws_elasticache_cluster" "awx_cache" {
+  name		  = "${var.cluster_name}_cache"
+  cluster_id	  = "${var.cluster_name}_cache"
+  num_cache_nodes = 1
+  engine	  = "memcached"
+  node_type	  = "cache.m4.large"
+  tags		  = local.common_tags
+}
+
 # =============================================
 # ECS - AWX Cache (memcached)
-# =============================================
-
-resource "aws_service_discovery_service" "awx_cache" {
-  name = "memcached"
-
-  dns_config {
-    namespace_id = aws_service_discovery_private_dns_namespace.awx.id
-    dns_records {
-      ttl  = 10
-      type = "A"
-    }
-  }
-
-  health_check_custom_config {
-    failure_threshold = 1
-  }
-}
-
-resource "aws_ecs_task_definition" "awx_cache" {
-  family                   = var.cluster_name
-  execution_role_arn       = aws_iam_role.execution_role.arn
-  network_mode             = "awsvpc"
-  requires_compatibilities = ["FARGATE"]
-  memory                   = 2048
-  cpu                      = 1024
-
-  container_definitions = templatefile("${path.module}/templates/cache_service.json", {})
-
-  tags = local.common_tags
-}
-
-resource "aws_ecs_service" "awx_cache" {
-  name            = "${var.cluster_name}-cache"
-  cluster         = var.cluster_name
-  task_definition = aws_ecs_task_definition.awx_cache.arn
-  desired_count   = 1
-  launch_type     = "FARGATE"
-
-  depends_on = [
-    aws_ecs_cluster.this,
-    aws_service_discovery_service.awx_cache
-  ]
-
-  service_registries {
-    registry_arn = aws_service_discovery_service.awx_cache.arn
-  }
-
-  network_configuration {
-    subnets         = var.private_subnets
-    security_groups = [aws_security_group.ecs_service_egress.id]
-  }
-}
-
+## =============================================
+#
+#resource "aws_service_discovery_service" "awx_cache" {
+#  name = "memcached"
+#
+#  dns_config {
+#    namespace_id = aws_service_discovery_private_dns_namespace.awx.id
+#    dns_records {
+#      ttl  = 10
+#      type = "A"
+#    }
+#  }
+#
+#  health_check_custom_config {
+#    failure_threshold = 1
+#  }
+#}
+#
+#resource "aws_ecs_task_definition" "awx_cache" {
+#  family                   = var.cluster_name
+#  execution_role_arn       = aws_iam_role.execution_role.arn
+#  network_mode             = "awsvpc"
+#  requires_compatibilities = ["FARGATE"]
+#  memory                   = 2048
+#  cpu                      = 1024
+#
+#  container_definitions = templatefile("${path.module}/templates/cache_service.json", {})
+#
+#  tags = local.common_tags
+#}
+#
+#resource "aws_ecs_service" "awx_cache" {
+#  name            = "${var.cluster_name}-cache"
+#  cluster         = var.cluster_name
+#  task_definition = aws_ecs_task_definition.awx_cache.arn
+#  desired_count   = 1
+#  launch_type     = "FARGATE"
+#
+#  depends_on = [
+#    aws_ecs_cluster.this,
+#    aws_service_discovery_service.awx_cache
+#  ]
+#
+#  service_registries {
+#    registry_arn = aws_service_discovery_service.awx_cache.arn
+#  }
+#
+#  network_configuration {
+#    subnets         = var.private_subnets
+#    security_groups = [aws_security_group.ecs_service_egress.id]
+#  }
+#}
+#
 # =============================================
 # ECS Cluster 
 # =============================================
