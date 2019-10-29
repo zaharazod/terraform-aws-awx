@@ -38,7 +38,7 @@
             },
             {
                 "name": "MEMCACHED_HOST",
-                "value": "memcached.awx.local"
+                "value": "${ aws_elasticache_cluster.cache.cluster_address" }
             },
             {
                 "name": "MEMCACHED_PORT",
