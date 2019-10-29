@@ -5,8 +5,7 @@
         "hostname": "awxweb",
         "links": [
             "awx:awx",
-            "rabbitmq:rabbitmq",
-            "memcached:memcached"
+            "rabbitmq:rabbitmq"
         ],
         "user": "root",
         "essential": true,
@@ -36,7 +35,7 @@
             },
             {
                 "name": "MEMCACHED_HOST",
-                "value": "memcached"
+                "value": "${ aws_elasticache_cluster.awx-cache.cluster_address }"
             },
             {
                 "name": "MEMCACHED_PORT",
@@ -71,8 +70,7 @@
         "image": "sblack4/awx_task:v6-b3",
         "hostname": "awx",
         "links": [
-            "rabbitmq:rabbitmq",
-            "memcached:memcached"
+            "rabbitmq:rabbitmq"
         ],
         "user": "root",
         "essential": true,
@@ -102,7 +100,7 @@
             },
             {
                 "name": "MEMCACHED_HOST",
-                "value": "memcached"
+                "value": "${ aws_elasticache_cluster.awx-cache.cluster_address }"
             },
             {
                 "name": "MEMCACHED_PORT",
@@ -159,18 +157,6 @@
             {
                 "name": "RABBITMQ_ERLANG_COOKIE",
                 "value": "cookiemonster"
-            }
-        ]
-    },
-    {
-        "name": "memcached",
-        "image": "memcached:alpine",
-        "hostname": "memcached",
-        "essential": true,
-        "memory": 2048,
-        "portMappings": [
-            {
-                "containerPort": 11211
             }
         ]
     }
