@@ -38,7 +38,7 @@
             },
             {
                 "name": "MEMCACHED_HOST",
-                "value": "${ aws_elasticache_cluster.cache.cluster_address" }
+		"value": "${ memcached_host }"
             },
             {
                 "name": "MEMCACHED_PORT",

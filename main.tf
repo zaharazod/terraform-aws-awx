@@ -85,6 +85,8 @@ resource "aws_ecs_task_definition" "awx_web" {
     database_username     = var.db_username
     database_password_arn = module.db_password.secret.arn
     database_host         = module.database.this_rds_cluster_endpoint
+
+    memcached_host	  = "${aws_elasticache_cluster.awx-cache.cluster_address}"
   })
 
   tags = local.common_tags
@@ -241,7 +243,7 @@ resource "aws_ecs_service" "awx_queue" {
 # ElastiCache (memcached)
 # ==============================================
 
-resource "aws_elasticache_cluster" "awx_cache" {
+resource "aws_elasticache_cluster" "awx-cache" {
   cluster_id	  = "${var.cluster_name}-awx-cache"
   num_cache_nodes = 1
   engine	  = "memcached"
