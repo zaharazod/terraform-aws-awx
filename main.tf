@@ -242,12 +242,20 @@ resource "aws_ecs_service" "awx_queue" {
 # ==============================================
 
 resource "aws_elasticache_cluster" "awx_cache" {
-  name		  = "${var.cluster_name}_cache"
-  cluster_id	  = "${var.cluster_name}_cache"
+  cluster_id	  = "${var.cluster_name}-awx-cache"
   num_cache_nodes = 1
   engine	  = "memcached"
   node_type	  = "cache.m4.large"
   tags		  = local.common_tags
+#  preferred_availability_zones = ["us-east-1a"]
+#  availability_zone = "us-east-1a"
+#  az_mode = "single-az"
+  subnet_group_name = "${aws_elasticache_subnet_group.subnet.name}"
+}
+
+resource "aws_elasticache_subnet_group" "subnet" {
+  name = "subnet"
+  subnet_ids = var.private_subnets
 }
 
 # =============================================
