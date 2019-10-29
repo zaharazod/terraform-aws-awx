@@ -22,9 +22,9 @@ resource "aws_route53_record" "url" {
 # =============================================
 #  IG/NAT
 # =============================================
-resource "aws_eip" "nat_gateway" {
-  tags = local.common_tags
-}
+#resource "aws_eip" "nat_gateway" {
+#  tags = local.common_tags
+#}
 
 data "aws_internet_gateway" "this" {
   filter {
@@ -33,17 +33,17 @@ data "aws_internet_gateway" "this" {
   }
 }
 
-resource "aws_nat_gateway" "this" {
-  allocation_id = aws_eip.nat_gateway.id
-  subnet_id     = var.public_subnets[0]
-
-  depends_on = [
-    data.aws_internet_gateway.this,
-    aws_eip.nat_gateway
-  ]
-
-  tags = local.common_tags
-}
+#resource "aws_nat_gateway" "this" {
+#  allocation_id = aws_eip.nat_gateway.id
+#  subnet_id     = var.public_subnets[0]
+#
+#  depends_on = [
+#    data.aws_internet_gateway.this,
+#    aws_eip.nat_gateway
+#  ]
+#
+#  tags = local.common_tags
+#}
 
 resource "aws_route_table" "this" {
   vpc_id = var.vpc_id

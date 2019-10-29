@@ -16,10 +16,10 @@ resource "aws_security_group" "alb" {
 
 resource "aws_lb" "this" {
   name_prefix        = "${var.cluster_name}-lb"
-  internal           = false
+  internal           = true
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb.id]
-  subnets            = var.public_subnets
+  subnets            = var.private_subnets
 
   enable_deletion_protection = false
 

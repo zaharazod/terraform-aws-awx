@@ -35,6 +35,12 @@ variable "route53_zone_name" {
   type        = string
 }
 
+variable "route53_internal" {
+  description 	= "Is Route53 Zone internal?"
+  type		= boolean
+  default	= true
+}
+
 # Networking
 
 variable "vpc_id" {
@@ -44,11 +50,6 @@ variable "vpc_id" {
 
 variable "database_subnets" {
   description = "List of subnet IDs where database resides"
-  type        = list(string)
-}
-
-variable "public_subnets" {
-  description = "List of public subnet IDs"
   type        = list(string)
 }
 
@@ -67,7 +68,7 @@ variable "cidr_block" {
 variable "db_instance_type" {
   description = "Instance type used by the Aurora Postgres database"
   type        = "string"
-  default     = "db.t3.medium"
+  default     = "db.t3.large"
 }
 
 variable "db_username" {

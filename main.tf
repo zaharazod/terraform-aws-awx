@@ -34,7 +34,7 @@ resource "aws_iam_role_policy_attachment" "execution_role_ec2_read_only" {
 # =============================================
 
 resource "aws_service_discovery_private_dns_namespace" "awx" {
-  name = "awx.local"
+  name = "awx-${var.cluster_name}.cengage.cloud"
   vpc  = var.vpc_id
 }
 
@@ -42,11 +42,11 @@ resource "aws_service_discovery_private_dns_namespace" "awx" {
 # Logs
 # =============================================
 
-resource "aws_cloudwatch_log_group" "ecs" {
-  name = "/ecs/fargate-task-definition"
-
-  tags = local.common_tags
-}
+#resource "aws_cloudwatch_log_group" "ecs" {
+#  name = "/ecs/fargate-task-definition"
+#
+#  tags = local.common_tags
+#}
 
 # =============================================
 # ECS - AWX Web
