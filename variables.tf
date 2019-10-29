@@ -37,7 +37,7 @@ variable "route53_zone_name" {
 
 variable "route53_internal" {
   description 	= "Is Route53 Zone internal?"
-  type		= boolean
+  type		= bool
   default	= true
 }
 
