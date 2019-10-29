@@ -1,7 +1,7 @@
 # terraform-aws-awx
 [![](https://github.com/rhythmictech/terraform-aws-awx/workflows/check/badge.svg)](https://github.com/rhythmictech/terraform-aws-awx/actions)
 
-Spin up AWX in AWS Fargate
+Spin up AWX in AWS Fargate.  Based on rhythmixtech/terraform-aws-awx.
 
 ## About 
 
@@ -20,7 +20,7 @@ tf apply /tmp/tf.plan
 
 ### Prerequisites 
 - VPC
-- Public and Private Subnets 
+- Private subnets
 - DNS name in Route53
 - SSL Certificate for DNS name in Certificate Manager
 
@@ -42,11 +42,6 @@ vpc_id                  = "vpc-c0ffeffe"
 cidr_block              = "1.234.678.0/20"
 
 database_subnets = [
-  "subnet-123abc",
-  "subnet-123abc",
-  "subnet-123abc"
-]
-public_subnets = [
   "subnet-123abc",
   "subnet-123abc",
   "subnet-123abc"
