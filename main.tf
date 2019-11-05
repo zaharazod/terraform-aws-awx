@@ -34,7 +34,7 @@ resource "aws_iam_role_policy_attachment" "execution_role_ec2_read_only" {
 # =============================================
 
 resource "aws_service_discovery_private_dns_namespace" "awx" {
-  name = "awx-${var.cluster_name}.cengage.cloud"
+  name = "awx-${var.cluster_name}.${var.route53_zone_name}"
   vpc  = var.vpc_id
 }
 
