@@ -7,13 +7,13 @@ module "database" {
   version = "~> 2.0"
 
   name          = "${var.cluster_name}-postgres"
-  username      = var.db_username
+  username      = "${var.db_username}"
   database_name = "awx"
 
   engine         = "aurora-postgresql"
   engine_version = "10.7"
 
-  vpc_id  = var.vpc_id
+  vpc_id  = "${var.vpc_id}"
   subnets = var.database_subnets
 
   allowed_security_groups       = [aws_security_group.ecs_service_egress.id]
