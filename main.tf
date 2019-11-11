@@ -84,7 +84,7 @@ resource "aws_ecs_task_definition" "awx_web" {
 
     database_username     = var.db_username
     database_password_arn = module.db_password.secret.arn
-    database_host         = module.database.this_rds_cluster_endpoint
+    database_host         = "${ var.db.database_host }"
 
     memcached_host	  = "${aws_elasticache_cluster.awx-cache.cluster_address}"
   })
@@ -156,7 +156,9 @@ resource "aws_ecs_task_definition" "awx_task" {
 
     database_username     = var.db_username
     database_password_arn = module.db_password.secret.arn
-    database_host         = module.database.this_rds_cluster_endpoint
+    database_host         = var.database_host
+    memcached_host	  = "${aws_elasticache_cluster.awx-cache.cluster_address}"
+  
   })
 
   tags = local.common_tags
