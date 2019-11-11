@@ -42,11 +42,11 @@ resource "aws_service_discovery_private_dns_namespace" "awx" {
 # Logs
 # =============================================
 
-#resource "aws_cloudwatch_log_group" "ecs" {
-#  name = "/ecs/fargate-task-definition"
-#
-#  tags = local.common_tags
-#}
+resource "aws_cloudwatch_log_group" "ecs" {
+  name = "/ecs/${var.cluster_name}"
+
+  tags = local.common_tags
+}
 
 # =============================================
 # ECS - AWX Web
@@ -73,7 +73,7 @@ resource "aws_ecs_task_definition" "awx_web" {
   family                   = var.cluster_name
   execution_role_arn       = aws_iam_role.execution_role.arn
   network_mode             = "awsvpc"
-  requires_compatibilities = ["FARGATE"]
+  requires_compatibilities = ["EC2"]
   memory                   = 2048
   cpu                      = 1024
 
@@ -97,7 +97,7 @@ resource "aws_ecs_service" "awx_web" {
   cluster         = var.cluster_name
   task_definition = aws_ecs_task_definition.awx_web.arn
   desired_count   = 1
-  launch_type     = "FARGATE"
+  launch_type     = "EC2"
 
   depends_on = [
     aws_ecs_cluster.this,
@@ -145,7 +145,7 @@ resource "aws_ecs_task_definition" "awx_task" {
   execution_role_arn       = aws_iam_role.execution_role.arn
   task_role_arn            = aws_iam_role.awx_task_role.arn
   network_mode             = "awsvpc"
-  requires_compatibilities = ["FARGATE"]
+  requires_compatibilities = ["EC2"]
   memory                   = 4096
   cpu                      = 2048
 
@@ -167,7 +167,7 @@ resource "aws_ecs_service" "awx_task" {
   cluster         = var.cluster_name
   task_definition = aws_ecs_task_definition.awx_task.arn
   desired_count   = 1
-  launch_type     = "FARGATE"
+  launch_type     = "EC2"
 
   depends_on = [
     aws_ecs_cluster.this,
@@ -208,7 +208,7 @@ resource "aws_ecs_task_definition" "awx_queue" {
   family                   = var.cluster_name
   execution_role_arn       = aws_iam_role.execution_role.arn
   network_mode             = "awsvpc"
-  requires_compatibilities = ["FARGATE"]
+  requires_compatibilities = ["EC2"]
   memory                   = 2048
   cpu                      = 1024
 
@@ -222,7 +222,7 @@ resource "aws_ecs_service" "awx_queue" {
   cluster         = var.cluster_name
   task_definition = aws_ecs_task_definition.awx_queue.arn
   desired_count   = 1
-  launch_type     = "FARGATE"
+  launch_type     = "EC2"
 
   depends_on = [
     aws_ecs_cluster.this,
@@ -260,61 +260,6 @@ resource "aws_elasticache_subnet_group" "subnet" {
   subnet_ids = var.private_subnets
 }
 
-# =============================================
-# ECS - AWX Cache (memcached)
-## =============================================
-#
-#resource "aws_service_discovery_service" "awx_cache" {
-#  name = "memcached"
-#
-#  dns_config {
-#    namespace_id = aws_service_discovery_private_dns_namespace.awx.id
-#    dns_records {
-#      ttl  = 10
-#      type = "A"
-#    }
-#  }
-#
-#  health_check_custom_config {
-#    failure_threshold = 1
-#  }
-#}
-#
-#resource "aws_ecs_task_definition" "awx_cache" {
-#  family                   = var.cluster_name
-#  execution_role_arn       = aws_iam_role.execution_role.arn
-#  network_mode             = "awsvpc"
-#  requires_compatibilities = ["FARGATE"]
-#  memory                   = 2048
-#  cpu                      = 1024
-#
-#  container_definitions = templatefile("${path.module}/templates/cache_service.json", {})
-#
-#  tags = local.common_tags
-#}
-#
-#resource "aws_ecs_service" "awx_cache" {
-#  name            = "${var.cluster_name}-cache"
-#  cluster         = var.cluster_name
-#  task_definition = aws_ecs_task_definition.awx_cache.arn
-#  desired_count   = 1
-#  launch_type     = "FARGATE"
-#
-#  depends_on = [
-#    aws_ecs_cluster.this,
-#    aws_service_discovery_service.awx_cache
-#  ]
-#
-#  service_registries {
-#    registry_arn = aws_service_discovery_service.awx_cache.arn
-#  }
-#
-#  network_configuration {
-#    subnets         = var.private_subnets
-#    security_groups = [aws_security_group.ecs_service_egress.id]
-#  }
-#}
-#
 # =============================================
 # ECS Cluster 
 # =============================================
