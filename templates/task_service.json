@@ -1,7 +1,7 @@
 [
     {
         "name": "awx",
-	"image": "918674766850.dkr.ecr.us-east-1.amazonaws.com/awx_task:z0",
+	"image": "ansible/awx_task:9.0.1",
         "user": "root",
         "essential": true,
         "cpu": 2048,
@@ -11,7 +11,7 @@
             "options": {
                 "awslogs-group": "/ecs/fargate-task-definition",
                 "awslogs-region": "us-east-1",
-                "awslogs-stream-prefix": "ecs"
+                "awslogs-stream-prefix": "awx"
             }
         },
         "portMappings": [
@@ -27,7 +27,7 @@
             }, 
             {
                 "name": "DATABASE_HOST",
-                "value": "${ database_host }"
+                "value": "${ db_host }"
             },
             {
                 "name": "AWX_ADMIN_USER",
@@ -39,7 +39,7 @@
             },
             {
                 "name": "MEMCACHED_HOST",
-                "value": "memcached.awx.local"
+                "value": "${ memcached_host }"
             },
             {
                 "name": "MEMCACHED_PORT",

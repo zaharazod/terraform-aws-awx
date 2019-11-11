@@ -67,13 +67,11 @@ variable "cidr_block" {
 variable "db_host" {
   description = "existing database"
   type	      = "string"
-  default     = ""
 }
 
 variable "memcached_host" {
   description = "existing cache"
   type	      = "string"
-  default     = ""
 }
 
 variable "db_instance_type" {

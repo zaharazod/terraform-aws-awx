@@ -6,7 +6,7 @@ module "database" {
   source  = "terraform-aws-modules/rds-aurora/aws"
   version = "~> 2.0"
 
-  name          = "${var.cluster_name}-postgres"
+  name          = "awx-${var.cluster_name}-postgres"
   username      = "${var.db_username}"
   database_name = "awx"
 
