@@ -23,7 +23,7 @@
             }, 
             {
                 "name": "DATABASE_HOST",
-                "value": "${ database_host }"
+                "value": "${ db_host }"
             },
             {
                 "name": "AWX_ADMIN_USER",

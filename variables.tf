@@ -64,6 +64,17 @@ variable "cidr_block" {
 }
 
 # DB 
+variable "db_host" {
+  description = "existing database"
+  type	      = "string"
+  default     = none
+}
+
+variable "memcached_host" {
+  description = "existing cache"
+  type	      = "string"
+  default     = none
+}
 
 variable "db_instance_type" {
   description = "Instance type used by the Aurora Postgres database"
