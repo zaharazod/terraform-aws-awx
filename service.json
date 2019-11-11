@@ -1,7 +1,7 @@
 [
     {
         "name": "awxweb",
-	"image": "918674766850.dkr.ecr.us-east-1.amazonaws.com/awx_web:v6-b3-z9.3",
+	"image": "ansible/awx_web:9.0.1",
         "hostname": "awxweb",
         "links": [
             "awx:awx",
@@ -67,7 +67,7 @@
     },
     {
         "name": "awx",
-        "image": "sblack4/awx_task:v6-b3",
+        "image": "ansible/awx_task:v9.0.1",
         "hostname": "awx",
         "links": [
             "rabbitmq:rabbitmq"
