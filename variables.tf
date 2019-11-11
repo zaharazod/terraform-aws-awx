@@ -64,7 +64,7 @@ variable "cidr_block" {
 }
 
 # DB 
-variable "db_host" {
+variable "database_host" {
   description = "existing database"
   type	      = "string"
 }
