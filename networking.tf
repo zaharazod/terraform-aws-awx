@@ -4,8 +4,9 @@
 # =============================================
 
 data "aws_route53_zone" "zone" {
-  name = var.route53_zone_name
+  name = "${var.route53_zone_name}"
   private_zone = true
+  vpc_id       = "${var.vpc_id}"
 }
 
 resource "aws_route53_record" "url" {
