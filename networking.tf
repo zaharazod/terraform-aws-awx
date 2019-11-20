@@ -8,55 +8,6 @@ data "aws_route53_zone" "zone" {
   private_zone = true
 }
 
-resource "aws_route53_record" "url" {
-  zone_id = data.aws_route53_zone.zone.zone_id
-  type    = "A"
-  name    = "${var.cluster_name}.${data.aws_route53_zone.zone.name}"
-
-  alias {
-    name                   = aws_lb.this.dns_name
-    zone_id                = aws_lb.this.zone_id
-    evaluate_target_health = false
-  }
-}
-
-# =============================================
-#  IG/NAT
-# =============================================
-resource "aws_eip" "nat_gateway" {
-  tags = local.common_tags
-}
-
-data "aws_internet_gateway" "this" {
-  filter {
-    name   = "attachment.vpc-id"
-    values = ["${var.vpc_id}"]
-  }
-}
-
-resource "aws_nat_gateway" "this" {
-  allocation_id = aws_eip.nat_gateway.id
-  subnet_id     = var.public_subnets[0]
-
-  depends_on = [
-    data.aws_internet_gateway.this,
-    aws_eip.nat_gateway
-  ]
-
-  tags = local.common_tags
-}
-
-resource "aws_route_table" "this" {
-  vpc_id = var.vpc_id
-
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = data.aws_internet_gateway.this.id
-  }
-
-  tags = local.common_tags
-}
-
 # =============================================
 #  INGRESS-EGRESSS
 # =============================================
