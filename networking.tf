@@ -8,6 +8,17 @@ data "aws_route53_zone" "zone" {
   private_zone = true
 }
 
+resource "aws_route53_record" "url" {
+  zone_id = data.aws_route53_zone.zone.zone_id
+  type    = "A"
+  name    = "${var.cluster_name}.${data.aws_route53_zone.zone.name}"
+
+  alias {
+    name                   = aws_lb.this.dns_name
+    zone_id                = aws_lb.this.zone_id
+    evaluate_target_health = false
+  }
+}
 # =============================================
 #  INGRESS-EGRESSS
 # =============================================
