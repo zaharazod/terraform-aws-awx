@@ -1,3 +1,64 @@
+resource "aws_security_group" "awx_asg" {
+  name        = "awx_asg"
+  description = "awx traffic"
+  vpc_id = var.vpc_id
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.0.0/8" ]
+  }
+
+  ingress {
+    from_port   = 8052
+    to_port     = 8052
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.0.0/8"]
+  }
+
+  egress {
+     from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
+    cidr_blocks     = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name = "awx_asg"
+  }
+}
+
+
+resource "aws_launch_configuration" "this" {
+  name          = "awx_${var.cluster_name}"
+  image_id      = var.runner_ami
+  instance_type = var.runner_instance_type
+  security_groups = [ aws_security_group.awx_asg.id ]
+  key_name      = var.ec2_key
+   lifecycle {
+     create_before_destroy = true
+  }
+}
+
+resource "aws_autoscaling_group" "runner_asg" {
+  name      = "${var.cluster_name}-asg"
+  tags     = [
+    { 
+      "key": "Name",  
+      "value": "${var.cluster_name}_awx_runner",
+      "propagate_at_launch":true
+      },
+    { 
+      "key": "awx",  
+      "value": "runner",
+      "propagate_at_launch":true
+      }
+    ]
+  max_size  = 1
+  min_size  = 1
+  launch_configuration = aws_launch_configuration.this.id
+  vpc_zone_identifier = var.private_subnets
+}
+
 
 # =============================================
 # ALB
@@ -12,7 +73,6 @@ resource "aws_security_group" "alb" {
     create_before_destroy = true
   }
 }
-
 
 resource "aws_lb" "this" {
   name_prefix        = "${var.cluster_name}-lb"

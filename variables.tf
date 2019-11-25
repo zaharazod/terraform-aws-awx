@@ -18,6 +18,18 @@ locals {
   )
 }
 
+variable "runner_ami" {
+  default = "ami-02eac2c0129f6376b"
+}
+
+variable "runner_instance_type" {
+  default = "t3a.large"
+}
+variable "ec2_key" {
+  type    = string
+  default = "awx-lab20-poc"
+}
+
 variable "tags" {
   description = "User-Defined tags"
   type        = map(string)
