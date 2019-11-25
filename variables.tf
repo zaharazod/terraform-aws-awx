@@ -47,11 +47,6 @@ variable "database_subnets" {
   type        = list(string)
 }
 
-variable "public_subnets" {
-  description = "List of public subnet IDs"
-  type        = list(string)
-}
-
 variable "private_subnets" {
   description = "List of private subnet IDs"
   type        = list(string)
@@ -66,7 +61,7 @@ variable "cidr_block" {
 
 variable "db_instance_type" {
   description = "Instance type used by the Aurora Postgres database"
-  type        = "string"
+  type        = string
   default     = "db.t3.medium"
 }
 
